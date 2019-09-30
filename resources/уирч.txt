@@ -1,0 +1,163 @@
+v = 1;
+W = degtorad(20*v);
+U = degtorad(20*v);
+I = degtorad(5*v);
+
+Az_u = [
+    cos(U) -sin(U) 0;
+    sin(U) cos(U) 0;
+    0 0 1];
+    
+Ax_i = [
+    1 0 0;
+    0 cos(I) -sin(I);
+    0 sin(I) cos(I)];
+    
+Az_W = [
+    cos(W) -sin(W) 0;
+    sin(W) cos(W) 0;
+    0 0 1];
+    
+r = [1;0;0];
+v = [0;1;0];
+ 
+R = Az_u*Ax_i*Az_W*r;
+V = Az_u*Ax_i*Az_W*v;
+    
+Zorb = R;
+Yorb = cross(R,V)/norm(cross(R,V));
+Xorb = cross(Yorb,Zorb)/norm(cross(Yorb,Zorb));
+    
+Avesk_orb = [ 
+        Xorb(1) Xorb(2) Xorb(3);
+        Yorb(1) Yorb(2) Yorb(3);
+        Zorb(1) Zorb(2) Zorb(3);
+    ];
+
+Avesk_orb_T = Avesk_orb';
+
+pS = 0.0055;
+f = 32;
+Map = [
+-1000*pS -1000*pS f;
+0        -1000*pS f;
+1000*pS  -1000*pS f;
+-1000*pS        0 f;
+0               0 f;
+1000*pS         0 f;
+-1000*pS  1000*pS f;
+0         1000*pS f;
+1000*pS   1000*pS f;
+];
+
+r_zv_vsk = [
+    Map(1,1:3)/norm(Map(1,1:3));
+    Map(2,1:3)/norm(Map(2,1:3));
+    Map(3,1:3)/norm(Map(3,1:3));
+    Map(4,1:3)/norm(Map(4,1:3));
+    Map(5,1:3)/norm(Map(5,1:3));
+    Map(6,1:3)/norm(Map(6,1:3));
+    Map(7,1:3)/norm(Map(7,1:3));
+    Map(8,1:3)/norm(Map(8,1:3));
+    Map(9,1:3)/norm(Map(9,1:3));  
+    ];
+
+r_zv_vesk = [
+    (Avesk_orb_T*r_zv_vsk(1,1:3)')';
+     (Avesk_orb_T*r_zv_vsk(2,1:3)')';
+     (Avesk_orb_T*r_zv_vsk(3,1:3)')';
+     (Avesk_orb_T*r_zv_vsk(4,1:3)')';
+     (Avesk_orb_T*r_zv_vsk(5,1:3)')';
+     (Avesk_orb_T*r_zv_vsk(6,1:3)')';
+     (Avesk_orb_T*r_zv_vsk(7,1:3)')';
+     (Avesk_orb_T*r_zv_vsk(8,1:3)')';
+     (Avesk_orb_T*r_zv_vsk(9,1:3)')';
+];
+    
+alfa_delta = [ 
+    radtodeg(atan(r_zv_vesk(1,2)/r_zv_vesk(1,1)))   radtodeg(asin(r_zv_vesk(1,3)));
+    radtodeg(atan(r_zv_vesk(2,2)/r_zv_vesk(2,1)))   radtodeg(asin(r_zv_vesk(2,3)));
+    radtodeg(atan(r_zv_vesk(3,2)/r_zv_vesk(3,1)))   radtodeg(asin(r_zv_vesk(3,3)));
+    radtodeg(atan(r_zv_vesk(4,2)/r_zv_vesk(4,1)))   radtodeg(asin(r_zv_vesk(4,3)));
+    radtodeg(atan(r_zv_vesk(5,2)/r_zv_vesk(5,1)))   radtodeg(asin(r_zv_vesk(5,3)));
+    radtodeg(atan(r_zv_vesk(6,2)/r_zv_vesk(6,1)))   radtodeg(asin(r_zv_vesk(6,3)));
+    radtodeg(atan(r_zv_vesk(7,2)/r_zv_vesk(7,1)))   radtodeg(asin(r_zv_vesk(7,3)));
+    radtodeg(atan(r_zv_vesk(8,2)/r_zv_vesk(8,1)))   radtodeg(asin(r_zv_vesk(8,3)));
+    radtodeg(atan(r_zv_vesk(9,2)/r_zv_vesk(9,1)))   radtodeg(asin(r_zv_vesk(9,3)));
+];
+
+alfa_Hour_delta_Deg = [ 
+    alfa_delta(1,1)/15   alfa_delta(1,2);
+    alfa_delta(2,1)/15   alfa_delta(2,2);
+    alfa_delta(3,1)/15   alfa_delta(3,2);
+    alfa_delta(4,1)/15   alfa_delta(4,2);
+    alfa_delta(5,1)/15   alfa_delta(5,2);
+    alfa_delta(6,1)/15   alfa_delta(6,2);
+    alfa_delta(7,1)/15   alfa_delta(7,2);
+    alfa_delta(8,1)/15   alfa_delta(8,2);
+    alfa_delta(9,1)/15   alfa_delta(9,2);
+]
+
+alfa_delta_r = [ 
+    degtorad(30)    degtorad(-8.52);
+    degtorad(40)    degtorad(-9.45);
+    degtorad(51)    degtorad(-7.7);
+    degtorad(31)    degtorad(0.12);
+    degtorad(40)    degtorad(0.132);
+    degtorad(50)    degtorad(3.37);
+    degtorad(27.5)  degtorad(11.03);
+    degtorad(40.5)  degtorad(10.73);
+    degtorad(47.5)  degtorad(11.87);
+];
+
+r_zv_vesk = [
+    cos(alfa_delta_r(1,1))*cos(alfa_delta_r(1,2)) sin(alfa_delta_r(1,1))*cos(alfa_delta_r(1,2))  sin(alfa_delta_r(1,2));
+    cos(alfa_delta_r(2,1))*cos(alfa_delta_r(2,2)) sin(alfa_delta_r(2,1))*cos(alfa_delta_r(2,2))  sin(alfa_delta_r(2,2));
+    cos(alfa_delta_r(3,1))*cos(alfa_delta_r(3,2)) sin(alfa_delta_r(3,1))*cos(alfa_delta_r(3,2))  sin(alfa_delta_r(3,2));
+    cos(alfa_delta_r(4,1))*cos(alfa_delta_r(4,2)) sin(alfa_delta_r(4,1))*cos(alfa_delta_r(4,2))  sin(alfa_delta_r(4,2));
+    cos(alfa_delta_r(5,1))*cos(alfa_delta_r(5,2)) sin(alfa_delta_r(5,1))*cos(alfa_delta_r(5,2))  sin(alfa_delta_r(5,2));
+    cos(alfa_delta_r(6,1))*cos(alfa_delta_r(6,2)) sin(alfa_delta_r(6,1))*cos(alfa_delta_r(6,2))  sin(alfa_delta_r(6,2));
+    cos(alfa_delta_r(7,1))*cos(alfa_delta_r(7,2)) sin(alfa_delta_r(7,1))*cos(alfa_delta_r(7,2))  sin(alfa_delta_r(7,2));
+    cos(alfa_delta_r(8,1))*cos(alfa_delta_r(8,2)) sin(alfa_delta_r(8,1))*cos(alfa_delta_r(8,2))  sin(alfa_delta_r(8,2));
+    cos(alfa_delta_r(9,1))*cos(alfa_delta_r(9,2)) sin(alfa_delta_r(9,1))*cos(alfa_delta_r(9,2))  sin(alfa_delta_r(9,2));
+];
+
+r_zv = [
+    (Avesk_orb*r_zv_vesk(1,(1:3))')';
+    (Avesk_orb*r_zv_vesk(2,(1:3))')';
+    (Avesk_orb*r_zv_vesk(3,(1:3))')';
+    (Avesk_orb*r_zv_vesk(4,(1:3))')';
+    (Avesk_orb*r_zv_vesk(5,(1:3))')';
+    (Avesk_orb*r_zv_vesk(6,(1:3))')';
+    (Avesk_orb*r_zv_vesk(7,(1:3))')';
+    (Avesk_orb*r_zv_vesk(8,(1:3))')';
+    (Avesk_orb*r_zv_vesk(9,(1:3))')';
+    ];
+
+Map_x_y = [
+   f*r_zv(1,1)/r_zv(1,3) f*r_zv(1,2)/r_zv(1,3);
+   f*r_zv(2,1)/r_zv(1,3) f*r_zv(2,2)/r_zv(2,3);
+   f*r_zv(3,1)/r_zv(1,3) f*r_zv(3,2)/r_zv(3,3);
+   f*r_zv(4,1)/r_zv(1,3) f*r_zv(4,2)/r_zv(4,3);
+   f*r_zv(5,1)/r_zv(1,3) f*r_zv(5,2)/r_zv(5,3);
+   f*r_zv(6,1)/r_zv(1,3) f*r_zv(6,2)/r_zv(6,3);
+   f*r_zv(7,1)/r_zv(1,3) f*r_zv(7,2)/r_zv(7,3);
+   f*r_zv(8,1)/r_zv(1,3) f*r_zv(8,2)/r_zv(8,3);
+   f*r_zv(9,1)/r_zv(1,3) f*r_zv(9,2)/r_zv(9,3);
+];
+
+grid on
+hold on
+plot(Map_x_y(1,1),Map_x_y(1,2),'r.','MarkerSize', 20);
+plot(Map_x_y(2,1),Map_x_y(2,2),'r.','MarkerSize', 20);
+plot(Map_x_y(3,1),Map_x_y(3,2),'r.','MarkerSize', 20);
+plot(Map_x_y(4,1),Map_x_y(4,2),'r.','MarkerSize', 20);
+plot(Map_x_y(5,1),Map_x_y(5,2),'r.','MarkerSize', 20);
+plot(Map_x_y(6,1),Map_x_y(6,2),'r.','MarkerSize', 20);
+plot(Map_x_y(7,1),Map_x_y(7,2),'r.','MarkerSize', 20);
+plot(Map_x_y(8,1),Map_x_y(8,2),'r.','MarkerSize', 20);
+plot(Map_x_y(9,1),Map_x_y(9,2),'r.','MarkerSize', 20);
+
+
+
+    

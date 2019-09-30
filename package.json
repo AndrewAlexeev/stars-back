@@ -1,0 +1,18 @@
+{
+  "name": "start",
+  "version": "1.0.0",
+  "main": "parsService.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.19.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "readline": "^1.3.0"
+  },
+  "description": ""
+}
