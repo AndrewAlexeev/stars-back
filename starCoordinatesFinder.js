@@ -1,5 +1,7 @@
 const  workWithMatrix = require('./MathForStar')
 let A_vesk_orb = []
+let A_vesk_orb_t = []
+
 let focus
 
 function start(body){
@@ -66,7 +68,7 @@ function start(body){
 		[Zorb[0], Zorb[1], Zorb[2]]
 	]
 	
-	let A_vesk_orb_t = workWithMatrix.TransMatrix(A_vesk_orb)
+	A_vesk_orb_t = workWithMatrix.TransMatrix(A_vesk_orb)
 
 	let sensorMat = sensorMatrixBuilder(body.matrix)
 
@@ -77,16 +79,18 @@ function start(body){
 		let norma2 = workWithMatrix.FindModuleVector(sensorMat[i])
 		r_vesk_zv.push([r[0]/norma2,r[1]/norma2,r[2]/norma2])
 	}
-	
+	console.log("----------r_vesk_zv-------")
+	console.log(r_vesk_zv)
+
 	let alfaDeltaExpected = []
 
 	for (let i = 0; i<9; i++){
-		let alfaExp = Math.atan(r_vesk_zv[i][1]/r_vesk_zv[i][0])
+		let alfaExp = Math.atan(r_vesk_zv[i][1]/r_vesk_zv[i][0]) + workWithMatrix.defenitionOfQuarterCircle(r_vesk_zv[i])
 		let deltaExp = Math.asin(r_vesk_zv[i][2])
 
 		alfaDeltaExpected.push({alfaExp, deltaExp})
 	}
-	console.log(alfaDeltaExpected)
+
 
 	return(alfaDeltaExpected)
 }
@@ -95,7 +99,7 @@ function start(body){
 
 function sensorMatrixBuilder(matrix){
 	
-	const percentOfBorder = 1
+	const percentOfBorder = 0.95
 
 	let border1Y = -matrix.heightlnPixels/2 * percentOfBorder*matrix.pixelSize 
 	let border2Y = -matrix.heightlnPixels/2 * percentOfBorder*matrix.pixelSize 
@@ -138,7 +142,7 @@ function sensorMatrixBuilder(matrix){
 
 }
 function getMat(){
-	return(A_vesk_orb)
+	return(A_vesk_orb_t)
 }
  
 function getFoc(){

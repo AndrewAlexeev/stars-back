@@ -80,7 +80,86 @@ function Determinant(A)   // Используется алгоритм Баре�
     else return B[N-1][N-1];
 }
 
+function defenitionOfQuarterCircle(matrix_alfa_delta_R)
+{
+  let e = matrix_alfa_delta_R[0]
+  let m = matrix_alfa_delta_R[1]
+  let n = matrix_alfa_delta_R[2]
+
+
+  let delta = Math.asin(n)
+  let deltaCos = Math.cos(delta)
+
+
+  let sigh_alfa_cos = (e/deltaCos)
+  let sigh_alfa_sin = (m/deltaCos)
+
+  if ((sigh_alfa_sin > 0) && (sigh_alfa_cos > 0))
+  {
+    return(0)
+  } 
+
+  if ((sigh_alfa_sin < 0) && (sigh_alfa_cos > 0))
+  {
+    return(2*Math.PI)
+  } 
+
+  if ((sigh_alfa_sin > 0) && (sigh_alfa_cos < 0))
+  {
+    return(Math.PI)
+  }
+
+  if ((sigh_alfa_sin < 0) && (sigh_alfa_cos < 0))
+  {
+     return(Math.PI)
+  }  
+}
+
+function AdjugateMatrix(A)   // A - двумерный квадратный массив
+{                                   
+    var N = A.length, adjA = []
+    for (var i = 0; i < N; i++)
+     { adjA[ i ] = []
+       for (var j = 0; j < N; j++)
+        { var B = [], sign = ((i+j)%2==0) ? 1 : -1
+          for (var m = 0; m < j; m++)
+           { B[m] = []
+             for (var n = 0; n < i; n++)   B[m][n] = A[m][n]
+             for (var n = i+1; n < N; n++) B[m][n-1] = A[m][n]
+           }
+          for (var m = j+1; m < N; m++)
+           { B[m-1] = []
+             for (var n = 0; n < i; n++)   B[m-1][n] = A[m][n]
+             for (var n = i+1; n < N; n++) B[m-1][n-1] = A[m][n]
+           }
+          adjA[ i ][j] = sign*Determinant(B)  // Функцию Determinant см. выше
+        }
+     }
+    return adjA
+}
+
+function InverseMatrix(A)   // A - двумерный квадратный массив
+{   
+    let det = Determinant(A) 
+    if (det == 0) return false
+    let N = A.length
+     A = AdjugateMatrix(A) // Функцию AdjugateMatrix см. выше
+    for (var i = 0; i < N; i++)
+     { for (var j = 0; j < N; j++) 
+      {
+      A[ i ][j] /= det
+      }
+      }
+    return A
+}
+
+
+
+  
+  
 module.exports.MultiplyMatrix = MultiplyMatrix
 module.exports.TransMatrix = TransMatrix
 module.exports.MultiplyMatrixVector = MultiplyMatrixVector
 module.exports.FindModuleVector = FindModuleVector
+module.exports.defenitionOfQuarterCircle = defenitionOfQuarterCircle
+module.exports.InverseMatrix = InverseMatrix
